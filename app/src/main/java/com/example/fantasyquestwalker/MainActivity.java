@@ -23,4 +23,5 @@ public class MainActivity extends AppCompatActivity {
         textAnim = AnimationUtils.loadAnimation(this, R.anim.text_animation);
         text.startAnimation(textAnim);
     }
+    //testing
 }
