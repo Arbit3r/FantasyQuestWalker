@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -14,14 +13,13 @@ import android.widget.ToggleButton;
 public class MainActivity extends AppCompatActivity {
 
     Animation whiteAnimEnabled, whiteAnimDisabled, textAnimEnabled, textAnimDisabled, textAnimLoad;
-    TextView text;
-    LinearLayout white;
+    LinearLayout white, text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text = findViewById(R.id.steps);
+        text = findViewById(R.id.textbox);
         white = findViewById(R.id.white);
         white.setVisibility(View.GONE);
 
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 white.startAnimation(whiteAnimEnabled);
                 text.startAnimation(textAnimEnabled);
             } else {
+                white.setVisibility(View.GONE);
                 white.startAnimation(whiteAnimDisabled);
                 text.startAnimation(textAnimDisabled);
             }
