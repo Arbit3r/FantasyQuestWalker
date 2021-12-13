@@ -2,10 +2,12 @@ package com.example.fantasyquestwalker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -42,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
                 white.setVisibility(View.GONE);
                 white.startAnimation(whiteAnimDisabled);
                 text.startAnimation(textAnimDisabled);
+            }
+        });
+        Button btn = (Button)findViewById(R.id.changejourney);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, JourneySelection.class));
             }
         });
     }
