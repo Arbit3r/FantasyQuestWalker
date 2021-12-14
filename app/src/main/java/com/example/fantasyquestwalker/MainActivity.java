@@ -77,8 +77,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
 
-        setContentView(R.layout.activity_main);
-        TextView tv = findViewById(R.id.jalka);
+        TextView tv = findViewById(R.id.number);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED) {
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         stepCount = event.values[0];
-        TextView tv = findViewById(R.id.jalka);
+        TextView tv = findViewById(R.id.number);
         tv.setText(Float.toString(stepCount));
     }
 
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         stepCount = prefGet.getFloat("StepKey", 0);
 
-        TextView tv = findViewById(R.id.jalka);
+        TextView tv = findViewById(R.id.number);
         tv.setText(Float.toString(stepCount));
     }
 
