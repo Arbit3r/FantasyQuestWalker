@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import android.widget.ToggleButton;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor;
-    private double MagnitudePrevious;
     float stepCount = 0;
 
     private float savedStepCount;
@@ -47,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         white = findViewById(R.id.white);
         white.setVisibility(View.GONE);
 
+
+
         new AnimationUtils();
         whiteAnimEnabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_enabled);
         whiteAnimDisabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_disabled);
@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         textAnimLoad = AnimationUtils.loadAnimation(this, R.anim.text_animation_load);
 
         text.startAnimation(textAnimLoad);
+
+
 
         ToggleButton toggle = findViewById(R.id.togglebutton);
         toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 text.startAnimation(textAnimDisabled);
             }
         });
+
+
         Button btn = (Button) findViewById(R.id.changejourney);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
 
-        TextView tv = findViewById(R.id.number);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED) {
