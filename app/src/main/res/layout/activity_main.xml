@@ -37,13 +37,14 @@
     <LinearLayout
         android:id="@+id/textbox"
         android:layout_width="match_parent"
-        android:layout_height="167dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="351dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jalka"
         app:layout_constraintVertical_bias="0.375">
 
         <TextView
@@ -86,8 +87,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/changejourney"
@@ -95,8 +95,22 @@
             android:layout_height="wrap_content"
             android:text="Change journey"
             android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/jalka"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="103dp"
+        android:layout_marginBottom="91dp"
+        android:text="TextView"
+        android:textColor="#FF0000"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/textbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
