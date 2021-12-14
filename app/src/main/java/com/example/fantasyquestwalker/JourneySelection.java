@@ -2,9 +2,7 @@ package com.example.fantasyquestwalker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,13 +15,13 @@ public class JourneySelection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_journeyselector);
+        setContentView(R.layout.activity_journeyselection);
 
         ListView lv = findViewById(R.id.lista);
 
         lv.setAdapter(new ArrayAdapter<Journey>(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.centerlist,
                 Singleton.getInstance().getMatkat())
         );
 
