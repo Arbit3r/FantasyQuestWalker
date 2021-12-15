@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextView tv = findViewById(R.id.number);
         tv.setText(String.format("%.1f", Singleton.getInstance().getMatkat(savedJourney).getMatka()
                 - ((savedStepCount + stepCount) * 0.0007f)));
-        
+
         TextView tv2 = findViewById(R.id.destination);
         tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
     }
@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
                 dialog.setCancelable(false);
-                dialog.setTitle("Do you want to change quest?");
-                dialog.setMessage("This will erase all prior progress. " );
-                dialog.setPositiveButton("Change Quest", new DialogInterface.OnClickListener() {
+                dialog.setTitle("THIS WILL RESET YOUR PROGRESS");
+                dialog.setMessage("Do you still want to change your current quest?");
+                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         createStepSave = 0;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         RefreshUI();
                     }
                 })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                         @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 RefreshUI();
