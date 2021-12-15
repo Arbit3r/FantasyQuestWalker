@@ -107,9 +107,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //add stuff here
+                createStepSave = 0;
                 SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = prefPut.edit();
                 prefEditor.putInt("indexKey", i);
+                prefEditor.putFloat("StepKey", createStepSave);
                 prefEditor.commit();
 
                 RefreshUI();
