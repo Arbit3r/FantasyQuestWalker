@@ -3,15 +3,13 @@ package com.example.fantasyquestwalker;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-<<<<<<< Updated upstream
-=======
 import android.content.DialogInterface;
 import android.content.Intent;
->>>>>>> Stashed changes
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -26,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,18 +38,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float savedStepCount;
     private float createStepSave;
 
-    // ottaa tallennetut askeleet, kävellyt askeleet ja matkan nimen, ja päivittää user interfacen
     public void RefreshUI(){
         SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedStepCount = prefGet.getFloat("StepKey", 0);
+
         SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedJourney = prefGet2.getInt("indexKey", 0);
+
         TextView tv = findViewById(R.id.number);
         tv.setText(String.format("%.1f", Singleton.getInstance().getMatkat(savedJourney).getMatka()
                 - ((savedStepCount + stepCount) * 0.0007f)));
+
         TextView tv2 = findViewById(R.id.destination);
         tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
+
     }
+
+
+
 
     Animation whiteAnimEnabled, whiteAnimDisabled, textAnimEnabled, textAnimDisabled, textAnimLoad;
     LinearLayout white, text;
@@ -63,8 +68,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         text = findViewById(R.id.textbox);
         white = findViewById(R.id.white);
 
-        // asetetaan valikko poissaolevaksi sovelluksessa
+        // asetetaan valikko poissaolevaksi sovellukssa
         white.setVisibility(View.GONE);
+
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
@@ -92,28 +98,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
         ListView lv = findViewById(R.id.lista);
+
         lv.setAdapter(new ArrayAdapter<Journey>(
                 this,
                 R.layout.centerlist,
                 Singleton.getInstance().getMatkat())
         );
 
-        // listan nappulanpainon jälkeen päivittää user interfacen oikeilla tiedoilla
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-<<<<<<< Updated upstream
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //add stuff here
-                createStepSave = 0;
-                SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefPut.edit();
-                prefEditor.putInt("indexKey", i);
-                prefEditor.putFloat("StepKey", createStepSave);
-                prefEditor.commit();
-                RefreshUI();
-            }
-        });
-=======
               @Override
               public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                   //add stuff here
@@ -148,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
               }
           });
->>>>>>> Stashed changes
 
         // pyytää käyttäjältä lupaa käyttää askelsensoria
         if (ContextCompat.checkSelfPermission(this,
@@ -162,10 +153,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         stepCount = event.values[0];
         RefreshUI();
     }
@@ -181,7 +175,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         RefreshUI();
     }
 
-    // yhdistää kävellyt askeleet käveltyihin askeleihin ja lopettaa sensorin käytön
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
