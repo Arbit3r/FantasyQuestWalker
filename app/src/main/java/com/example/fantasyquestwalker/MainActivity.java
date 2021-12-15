@@ -43,9 +43,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         text = findViewById(R.id.textbox);
         white = findViewById(R.id.white);
+
+        // asetetaan valikko poissaolevaksi sovellukssa
         white.setVisibility(View.GONE);
 
-
+        // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
         whiteAnimEnabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_enabled);
         whiteAnimDisabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_disabled);
@@ -53,10 +55,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         textAnimDisabled = AnimationUtils.loadAnimation(this, R.anim.text_animation_disabled);
         textAnimLoad = AnimationUtils.loadAnimation(this, R.anim.text_animation_load);
 
+        // aloitetaan tekstin animaatio
         text.startAnimation(textAnimLoad);
 
-
-
+        // togglenappula joka avaa ja asettaa valikon näkyväksi sekä sulkee valikon ja asettaa sen poissaolevaksi
         ToggleButton toggle = findViewById(R.id.togglebutton);
         toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -70,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-
-        Button btn = (Button) findViewById(R.id.changejourney);
+        // nappula joka avaa toisen activityn jossa on listview valittavista kohteista
+        Button btn = findViewById(R.id.changejourney);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +81,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-
-
+        // pyytää käyttäjältä lupaa käyttää askelsensoria
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED) {
             requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 101);
@@ -88,17 +89,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Log.d("sensor.permission", "denied");
         }
 
+        // vastaanottaa koko sensoripalvelun puhelimen sisäisistä metodeista ja rekisteröi sen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
+        // hakee vanhan tallennetun askelmäärän ja valitun matkakohteen
         SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedStepCount = prefGet.getFloat("StepKey", 0);
 
+        // asettaa edelliset valuet
         TextView tv = findViewById(R.id.number);
         tv.setText(Float.toString(savedStepCount));
-
     }
 
     @Override
@@ -108,16 +110,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         tv.setText(Float.toString(savedStepCount + event.values[0]));
     }
 
+    // pitää olla tuntemattomista syistä, muuten ei toimi tai ainakin valittaa jostain
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
-
     }
 
     @Override
