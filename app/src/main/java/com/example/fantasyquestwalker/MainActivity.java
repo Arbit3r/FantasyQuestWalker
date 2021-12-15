@@ -5,7 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+<<<<<<< Updated upstream
+=======
+import android.content.DialogInterface;
+import android.content.Intent;
+>>>>>>> Stashed changes
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -40,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedJourney = prefGet2.getInt("indexKey", 0);
         TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(Singleton.getInstance().getMatkat(savedJourney).getMatka()
+        tv.setText(String.format("%.1f", Singleton.getInstance().getMatkat(savedJourney).getMatka()
                 - ((savedStepCount + stepCount) * 0.0007f)));
         TextView tv2 = findViewById(R.id.destination);
         tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // listan nappulanpainon jälkeen päivittää user interfacen oikeilla tiedoilla
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+<<<<<<< Updated upstream
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //add stuff here
@@ -106,6 +113,42 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 RefreshUI();
             }
         });
+=======
+              @Override
+              public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                  //add stuff here
+                  AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                  dialog.setCancelable(false);
+                  dialog.setTitle("Do you want to change quest?");
+                  dialog.setMessage("This will erase all prior progress. " );
+                  dialog.setPositiveButton("Change Quest", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int id) {
+                          createStepSave = 0;
+                          SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+                          SharedPreferences.Editor prefEditor = prefPut.edit();
+                          prefEditor.putInt("indexKey", i);
+                          prefEditor.putFloat("StepKey", createStepSave);
+                          prefEditor.commit();
+
+                          RefreshUI();
+                      }
+                  })
+                          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  RefreshUI();
+                              }
+                          });
+
+                  final AlertDialog alert = dialog.create();
+                  alert.show();
+
+
+
+              }
+          });
+>>>>>>> Stashed changes
 
         // pyytää käyttäjältä lupaa käyttää askelsensoria
         if (ContextCompat.checkSelfPermission(this,
