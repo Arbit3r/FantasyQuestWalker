@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         white.setVisibility(View.GONE);
 
 
-
         new AnimationUtils();
         whiteAnimEnabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_enabled);
         whiteAnimDisabled = AnimationUtils.loadAnimation(this, R.anim.white_animation_disabled);
@@ -93,13 +92,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedStepCount = prefGet.getFloat("StepKey", 0);
+
+        TextView tv = findViewById(R.id.number);
+        tv.setText(Float.toString(savedStepCount));
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         stepCount = event.values[0];
         TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(stepCount));
+        tv.setText(Float.toString(savedStepCount + event.values[0]));
     }
 
     @Override
@@ -112,25 +118,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
 
-        SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-        stepCount = prefGet.getFloat("StepKey", 0);
-
-        TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(stepCount));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this, sensor);
 
+    }
 
-        createStepSave = stepCount;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        createStepSave = stepCount + savedStepCount;
         SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = prefPut.edit();
         prefEditor.putFloat("StepKey", createStepSave);
         prefEditor.commit();
+        sensorManager.unregisterListener(this, sensor);
     }
-
-
 }
