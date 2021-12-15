@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 public class Splash extends AppCompatActivity {
 
+    // splashscreen kestää 2,5 sekuntia
     private static int SPLASH = 2500;
 
     Animation startTextAnim;
     TextView text;
 
+    // animaatio, jonka jälkeen vaihtaa mainactivityyn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

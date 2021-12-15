@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         text = findViewById(R.id.textbox);
         white = findViewById(R.id.white);
 
-        // asetetaan valikko poissaolevaksi sovellukssa
+        // asetetaan valikko poissaolevaksi sovelluksessa
         white.setVisibility(View.GONE);
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
