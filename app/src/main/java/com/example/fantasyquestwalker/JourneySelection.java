@@ -2,6 +2,8 @@ package com.example.fantasyquestwalker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +31,10 @@ public class JourneySelection extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //add stuff here
+                SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = prefPut.edit();
+                prefEditor.putInt("indexKey", i);
+                prefEditor.commit();
             }
         });
     }

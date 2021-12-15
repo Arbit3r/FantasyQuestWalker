@@ -29,9 +29,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor sensor;
     float stepCount = 0;
-
+    private int savedJourney;
     private float savedStepCount;
     private float createStepSave;
+    private float jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - (savedStepCount + stepCount) * 0.0007f;
+
+
 
     Animation whiteAnimEnabled, whiteAnimDisabled, textAnimEnabled, textAnimDisabled, textAnimLoad;
     LinearLayout white, text;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // asetetaan valikko poissaolevaksi sovellukssa
         white.setVisibility(View.GONE);
+
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
@@ -101,10 +105,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // asettaa edelliset valuet
         TextView tv = findViewById(R.id.number);
         tv.setText(Float.toString(savedStepCount));
+
+
+        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedJourney = prefGet2.getInt("indexKey", 0);
+
+
+        TextView tv2 = findViewById(R.id.destination);
+        tv2.setText(Float.toString(jumalaMuuttuja));
+
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         stepCount = event.values[0];
         TextView tv = findViewById(R.id.number);
         tv.setText(Float.toString(savedStepCount + event.values[0]));
@@ -118,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
+
+        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedJourney = prefGet2.getInt("indexKey", 0);
+
+        TextView tv2 = findViewById(R.id.destination);
+        tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
     }
 
     @Override
