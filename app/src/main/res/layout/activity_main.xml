@@ -37,8 +37,8 @@
     <LinearLayout
         android:id="@+id/textbox"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="372dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="376dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,10 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/rubik"
+            android:singleLine="true"
             android:text="Destination"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            android:singleLine="true" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/number"
@@ -74,7 +74,7 @@
             android:fontFamily="@font/rubik"
             android:text="km left"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
