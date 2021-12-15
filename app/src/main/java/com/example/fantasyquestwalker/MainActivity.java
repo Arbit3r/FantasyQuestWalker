@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int savedJourney;
     private float savedStepCount;
     private float createStepSave;
-    private float jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - (savedStepCount + stepCount) * 0.0007f;
+    private float jumalaMuuttuja;
 
 
 
@@ -102,18 +102,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedStepCount = prefGet.getFloat("StepKey", 0);
 
-        // asettaa edelliset valuet
-        TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(savedStepCount));
-
-
-        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-        savedJourney = prefGet2.getInt("indexKey", 0);
-
-
-        TextView tv2 = findViewById(R.id.destination);
-        tv2.setText(Float.toString(jumalaMuuttuja));
-
 
     }
 
@@ -122,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         stepCount = event.values[0];
         TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(savedStepCount + event.values[0]));
+        tv.setText(Float.toString(Singleton.getInstance().getMatkat(savedJourney).getMatka() - ((savedStepCount + stepCount) * 0.0007f)));
     }
 
     // pitää olla tuntemattomista syistä, muuten ei toimi tai ainakin valittaa jostain
@@ -136,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedJourney = prefGet2.getInt("indexKey", 0);
+
+        jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - ((savedStepCount + stepCount) * 0.0007f);
+
+        // asettaa edelliset valuet
+        TextView tv = findViewById(R.id.number);
+        tv.setText(Float.toString(jumalaMuuttuja));
 
         TextView tv2 = findViewById(R.id.destination);
         tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
