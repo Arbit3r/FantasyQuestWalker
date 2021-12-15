@@ -26,10 +26,13 @@
 
     <ToggleButton
         android:id="@+id/togglebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="37dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/white"
         android:text="ToggleButton"
+        android:textOff="OPEN"
+        android:textOn="CLOSE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
