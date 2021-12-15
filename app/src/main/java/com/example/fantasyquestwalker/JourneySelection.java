@@ -3,6 +3,7 @@ package com.example.fantasyquestwalker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,7 @@ public class JourneySelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journeyselection);
-
+        Intent intent = new Intent(this, MainActivity.class);
         ListView lv = findViewById(R.id.lista);
 
         lv.setAdapter(new ArrayAdapter<Journey>(
@@ -35,6 +36,7 @@ public class JourneySelection extends AppCompatActivity {
                 SharedPreferences.Editor prefEditor = prefPut.edit();
                 prefEditor.putInt("indexKey", i);
                 prefEditor.commit();
+                startActivity(intent);
             }
         });
     }

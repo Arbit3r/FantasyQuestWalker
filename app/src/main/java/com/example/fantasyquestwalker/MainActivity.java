@@ -20,8 +20,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -32,7 +35,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int savedJourney;
     private float savedStepCount;
     private float createStepSave;
-    private float jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - (savedStepCount + stepCount) * 0.0007f;
+
+    public void RefreshUI(){
+        SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedStepCount = prefGet.getFloat("StepKey", 0);
+
+        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedJourney = prefGet2.getInt("indexKey", 0);
+
+        TextView tv = findViewById(R.id.number);
+        tv.setText(Float.toString(Singleton.getInstance().getMatkat(savedJourney).getMatka()
+                - ((savedStepCount + stepCount) * 0.0007f)));
+
+        TextView tv2 = findViewById(R.id.destination);
+        tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
+
+    }
+
+
+
 
     Animation whiteAnimEnabled, whiteAnimDisabled, textAnimEnabled, textAnimDisabled, textAnimLoad;
     LinearLayout white, text;
@@ -47,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // asetetaan valikko poissaolevaksi sovellukssa
         white.setVisibility(View.GONE);
+
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
@@ -73,12 +95,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        // nappula joka avaa toisen activityn jossa on listview valittavista kohteista
-        Button btn = findViewById(R.id.changejourney);
-        btn.setOnClickListener(new View.OnClickListener() {
+        ListView lv = findViewById(R.id.lista);
+
+        lv.setAdapter(new ArrayAdapter<Journey>(
+                this,
+                R.layout.centerlist,
+                Singleton.getInstance().getMatkat())
+        );
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, JourneySelection.class));
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //add stuff here
+                SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = prefPut.edit();
+                prefEditor.putInt("indexKey", i);
+                prefEditor.commit();
+
+                RefreshUI();
+
+
             }
         });
 
@@ -95,45 +131,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        // hakee vanhan tallennetun askelmäärän ja asettaa valuet
-        SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-        savedStepCount = prefGet.getFloat("StepKey", 0);
-        TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(savedStepCount));
 
-        // hakee vanhan valitun matkakohteen ja asettaa valuet
-        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-        savedJourney = prefGet2.getInt("indexKey", 0);
-        TextView tv2 = findViewById(R.id.destination);
-        tv2.setText(Float.toString(jumalaMuuttuja));
     }
 
-    // tapahtuu aina kun askelten lukumäärä päivittyy
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         stepCount = event.values[0];
-        TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(savedStepCount + event.values[0]));
+        RefreshUI();
     }
 
     // pitää olla tuntemattomista syistä, muuten ei toimi tai ainakin valittaa jostain
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
-    //
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, sensor, sensorManager.SENSOR_DELAY_NORMAL);
-
-        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
-        savedJourney = prefGet2.getInt("indexKey", 0);
-
-        TextView tv2 = findViewById(R.id.destination);
-        tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
+        RefreshUI();
     }
 
-    //
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
