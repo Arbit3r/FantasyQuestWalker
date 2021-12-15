@@ -9,13 +9,14 @@ public class Singleton {
     }
     private Singleton() {
         matkat = new ArrayList<Journey>();
-        matkat.add(new Journey("Mordor", 2863));
-        matkat.add(new Journey("500 miles and 500 more", 1609));
-        matkat.add(new Journey("Journey to the West", 5794));
-        matkat.add(new Journey("Route 66", 3944));
-        matkat.add(new Journey("The Orient Express", 2989));
-        matkat.add(new Journey("Run through Finland", 1160));
         matkat.add(new Journey("Marathon", 42));
+        matkat.add(new Journey("Run through Finland", 1160));
+        matkat.add(new Journey("500 miles and 500 more", 1609));
+        matkat.add(new Journey("Mordor", 2863));
+        matkat.add(new Journey("The Orient Express", 2989));
+        matkat.add(new Journey("Route 66", 3944));
+        matkat.add(new Journey("Journey to the West", 5794));
+
     }
     public ArrayList<Journey> getMatkat(){
         return matkat;
