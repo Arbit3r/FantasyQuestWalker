@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int savedJourney;
     private float savedStepCount;
     private float createStepSave;
-    private float jumalaMuuttuja;
-
-
+    private float jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - (savedStepCount + stepCount) * 0.0007f;
 
     Animation whiteAnimEnabled, whiteAnimDisabled, textAnimEnabled, textAnimDisabled, textAnimLoad;
     LinearLayout white, text;
@@ -49,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // asetetaan valikko poissaolevaksi sovellukssa
         white.setVisibility(View.GONE);
-
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
@@ -98,25 +95,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        // hakee vanhan tallennetun askelmäärän ja valitun matkakohteen
+        // hakee vanhan tallennetun askelmäärän ja asettaa valuet
         SharedPreferences prefGet = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedStepCount = prefGet.getFloat("StepKey", 0);
+        TextView tv = findViewById(R.id.number);
+        tv.setText(Float.toString(savedStepCount));
 
-
+        // hakee vanhan valitun matkakohteen ja asettaa valuet
+        SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
+        savedJourney = prefGet2.getInt("indexKey", 0);
+        TextView tv2 = findViewById(R.id.destination);
+        tv2.setText(Float.toString(jumalaMuuttuja));
     }
 
+    // tapahtuu aina kun askelten lukumäärä päivittyy
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         stepCount = event.values[0];
         TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(Singleton.getInstance().getMatkat(savedJourney).getMatka() - ((savedStepCount + stepCount) * 0.0007f)));
+        tv.setText(Float.toString(savedStepCount + event.values[0]));
     }
 
     // pitää olla tuntemattomista syistä, muuten ei toimi tai ainakin valittaa jostain
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
+    //
     @Override
     protected void onResume() {
         super.onResume();
@@ -125,22 +129,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences prefGet2 = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         savedJourney = prefGet2.getInt("indexKey", 0);
 
-        jumalaMuuttuja = Singleton.getInstance().getMatkat(savedJourney).getMatka() - ((savedStepCount + stepCount) * 0.0007f);
-
-        // asettaa edelliset valuet
-        TextView tv = findViewById(R.id.number);
-        tv.setText(Float.toString(jumalaMuuttuja));
-
         TextView tv2 = findViewById(R.id.destination);
         tv2.setText(Singleton.getInstance().getMatkat(savedJourney).getNimi());
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
+    //
     @Override
     protected void onDestroy() {
         super.onDestroy();
