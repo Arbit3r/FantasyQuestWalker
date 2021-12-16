@@ -9,6 +9,7 @@ public class Singleton {
     }
     private Singleton() {
         matkat = new ArrayList<Journey>();
+        matkat.add(new Journey("Testi matka", 0.01f));
         matkat.add(new Journey("Marathon", 42));
         matkat.add(new Journey("Run through Finland", 1160));
         matkat.add(new Journey("500 miles and 500 more", 1609));

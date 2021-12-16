@@ -61,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         text = findViewById(R.id.textbox);
         white = findViewById(R.id.white);
 
+
         // asetetaan valikko poissaolevaksi sovelluksessa
         white.setVisibility(View.GONE);
+
 
         // loadataan valmiiksi tehdyt animaatiot niiden omista tiedostoista
         new AnimationUtils();
@@ -72,8 +74,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         textAnimDisabled = AnimationUtils.loadAnimation(this, R.anim.text_animation_disabled);
         textAnimLoad = AnimationUtils.loadAnimation(this, R.anim.text_animation_load);
 
+
         // aloitetaan tekstin animaatio
         text.startAnimation(textAnimLoad);
+
 
         // togglenappula joka avaa ja asettaa valikon näkyväksi sekä sulkee valikon ja asettaa sen poissaolevaksi
         ToggleButton toggle = findViewById(R.id.togglebutton);
@@ -89,12 +93,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+
+
         ListView lv = findViewById(R.id.lista);
         lv.setAdapter(new ArrayAdapter<Journey>(
                 this,
                 R.layout.centerlist,
                 Singleton.getInstance().getMatkat())
         );
+
+
 
         // listan nappulanpainon jälkeen päivittää user interfacen oikeilla tiedoilla
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -108,12 +116,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         createStepSave = 0;
+                        savedStepCount = 0;
+                        stepCount = 0;
                         SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor prefEditor = prefPut.edit();
                         prefEditor.putInt("indexKey", i);
                         prefEditor.putFloat("StepKey", createStepSave);
                         prefEditor.commit();
                         RefreshUI();
+                        TextView tv = findViewById(R.id.kilometers);
+                        tv.setText("km left");
                     }
                 })
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -128,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+
+
         // pyytää käyttäjältä lupaa käyttää askelsensoria
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED) {
@@ -140,15 +154,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
     }
 
+    //Sensorin tilan vaihtuessa lisätään askeliin 1
     @Override
     public void onSensorChanged(SensorEvent event) {
-        stepCount = event.values[0];
-        RefreshUI();
+
+        if ((Singleton.getInstance().getMatkat(savedJourney).getMatka() - ((savedStepCount + stepCount) * 0.0007f)) > 0){
+            stepCount++;
+            RefreshUI();
+        }else{
+            TextView tv = findViewById(R.id.kilometers);
+            TextView tv2 = findViewById(R.id.number);
+            tv2.setText("Suoritettu");
+            tv.setText("Onnittelut!");
+        }
+
     }
 
-    // pitää olla tuntemattomista syistä, muuten ei toimi tai ainakin valittaa jostain
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
@@ -159,16 +184,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         RefreshUI();
     }
 
-    // pitää pitää vaikkei käytä mitään(?)
+    // yhdistää kävellyt askeleet käveltyihin askeleihin ja lopettaa sensorin käytön
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    // yhdistää kävellyt askeleet käveltyihin askeleihin ja lopettaa sensorin käytön
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
         createStepSave = stepCount + savedStepCount;
         SharedPreferences prefPut = getSharedPreferences("StepsPref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = prefPut.edit();
